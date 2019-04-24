@@ -10,7 +10,7 @@
 	<script src="js/app-main.js"></script>
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/app-layout.css" />
+    <link rel="stylesheet" th:href="@{/css/app-layout.css}" />
     
    	<link rel="icon" type="image/png" href="images/tic-tac-toe.png" />
    	
@@ -21,7 +21,7 @@
 	<div class="container-fluid">
  		<div class="navbar-header">
    			<span class="navbar-brand">
-     			<img alt="Brand" src="images/tic-tac-toe.png" /> Tic-Tac-Toe
+				Tic-Tac-Toe
    			</span>
  		</div>
 	</div>
@@ -31,14 +31,20 @@
 	<div class="panel-body">
 	
 	<h4 class="game-status">
-    	<span th:if="${game.getPlayerState().isInProgress()}" class="label label-default">
-    		Your turn. Think very carefully and click a square when ready.</span>
-    	<span th:if="${game.getPlayerState().isWin()}" class="label label-success">
-    		YOU WIN! Your superior intellect prevailed and assured a sound victory.</span>
-    	<span th:if="${game.getPlayerState().isLoss()}" class="label label-danger">
-    		You've lost. Better luck next time!</span>
-    	<span th:if="${game.getPlayerState().isDraw()}" class="label label-info">
-    		Mheh! A smelly draw. Beats losing though, right?</span>
+		<div th:if="${game.isGameOver()==false}">
+			<span th:if="${game.getPlayerTurn().isXTurn()}" class="label label-default">
+				CROSS turn. Think very carefully and click a square when ready.</span>
+			<span th:unless="${game.getPlayerTurn().isOTurn()}" class="label label-default">
+				NOUGHT turn. Think very carefully and click a square when ready.</span>
+		</div>
+		<div th:if="${game.isGameOver()==true}">
+			<span th:if="${game.getPlayerState().isXWin()}" class="label label-success">
+				CROSS WIN! Your superior intellect prevailed and assured a sound victory.</span>
+			<span th:if="${game.getPlayerState().isOWin()}" class="label label-danger">
+				NOUGHT WIN!. NOUGHT luck it is!</span>
+			<span th:if="${game.getPlayerState().isDraw()}" class="label label-info">
+				DRAW !</span>
+		</div>
 	</h4>
 	
 	<table class="board">
@@ -54,11 +60,7 @@
 		</tr>
 	</table>
 	
-	<form id="form_mark_tile" th:action="@{/}" method="POST" class="form-inline">		
-		<div class="checkbox">
-   			<label><input name="player_go_first" type="checkbox" th:checked="${game.isPlayerGoFirst()}" /> Play First</label>
- 		</div>
-
+	<form id="form_mark_tile" th:action="@{/}" method="POST" class="form-inline">
 		<div class="btn-new-game-wrap">
 			<input id="board_size" name="board_size" type="text" placeholder="Board size" value=""/>
 		</div>

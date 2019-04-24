@@ -31,11 +31,11 @@
 }
 
 .board-row-tile.x-value {
-	background-color: #FF6600;
+	background-color: #00b54a;
 }
 
 .board-row-tile.o-value {
-	background-color: #006699;
+	background-color: #b50024;
 }
 
 .board-row-tile.available:hover {

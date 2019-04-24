@@ -20,34 +20,31 @@ public class TicTacToeController {
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public String markTile( 
-			@ModelAttribute("game" ) Game game, 
+			@ModelAttribute("game") Game game,
 			@RequestParam("tile_id") String tileId,
 			@RequestParam(value = "board_size", defaultValue = "3") String size,
-			@RequestParam(value = "new_game", required = false, defaultValue = "false") boolean newGame,
-			@RequestParam(value = "player_go_first", required = false, defaultValue = "false") boolean playerGoFirst 
+			@RequestParam(value = "new_game", required = false, defaultValue = "false") boolean newGame
 			) {
-		
 		if ( newGame ) {
-			System.out.println(size);
-			game.reset(Integer.valueOf(size),Integer.valueOf(size));
-			game.setPlayerGoFirst( playerGoFirst );
-			if ( !playerGoFirst ) {
-				// give computer a small advantage by always placing X in the center as its first move
-				game.markTile( "1-1" );
-			}
+			game.reset(validateSize(size),validateSize(size));
 		} else {
-			game.markTile( tileId ); // Player Turn
-			
-			game.markTileRandom(); // Computer Turn
+			game.markTile( tileId );
 		}
-		
 		return "index";
+	}
+
+	private int validateSize(String size){
+		// Size must be int, less than 8, and more than 2
+		if(size.matches("\\d+") && Integer.valueOf(size) < 8 && Integer.valueOf(size) > 2) {
+			return Integer.valueOf(size);
+		} else {
+			return 3;
+		}
 	}
 	
 	@ModelAttribute("game")
 	public Game populateGame() {
 		// populate object for first time if null (new session)
-		// See: http://stackoverflow.com/questions/2757198/spring-framework-3-and-session-attributes
 		return new Game(); 
 	}
 

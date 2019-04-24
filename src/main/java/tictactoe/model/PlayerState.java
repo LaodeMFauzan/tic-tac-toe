@@ -1,22 +1,28 @@
 package tictactoe.model;
 
 public enum PlayerState {
-	
-	IN_PROGRESS, 
-	WIN, 
-	LOSS, 
+	X_TURN,
+	O_TURN,
+	IN_PROGRESS,
+	CROSS_WON,
+	NOUGHT_WON,
 	DRAW;
 	
-	public boolean isInProgress() {
-		return this == IN_PROGRESS;
+
+	public boolean isXTurn(){
+		return this == X_TURN;
+	}
+
+	public boolean isOTurn(){
+		return this == X_TURN;
+	}
+
+	public boolean isXWin() {
+		return this == CROSS_WON;
 	}
 	
-	public boolean isWin() {
-		return this == WIN;
-	}
-	
-	public boolean isLoss() {
-		return this == LOSS;
+	public boolean isOWin() {
+		return this == NOUGHT_WON;
 	}
 	
 	public boolean isDraw() {
@@ -24,7 +30,7 @@ public enum PlayerState {
 	}
 	
 	public boolean isGameOver() {
-		return this == WIN || this == LOSS || this == DRAW;
+		return this == CROSS_WON || this == NOUGHT_WON || this == DRAW;
 	}
 	
-};
+}

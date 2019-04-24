@@ -6,27 +6,23 @@ public class Game {
 	
 	private Board board;
 	private PlayerState playerState;
+	private PlayerState playerTurn;
 	private boolean playerGoFirst;
 	private boolean nextMoveX;
 	private final static int DEFAULT_ROW = 3;
     private final static int DEFAULT_COLUMN = 3;
 
 	public Game() {
-		startNew(DEFAULT_ROW, DEFAULT_COLUMN);
+		initGame(DEFAULT_ROW, DEFAULT_COLUMN);
 	}
 
-	private void startNew(int rows, int columns) {
+	private void initGame(int rows, int columns) {
 		playerGoFirst = true;
 		nextMoveX = true;
 		playerState = PlayerState.IN_PROGRESS;
+		playerTurn = PlayerState.X_TURN;
 
         board = new Board(rows,columns);
-
-//		if ( board == null ) {
-//			board = new Board(rows,columns);
-//		} else {
-//			board.reset();
-//		}
 	}
 
 	public Board getBoard() {
@@ -36,26 +32,31 @@ public class Game {
 	public void markTile( String tileId ) {
 		setTileValue( board.get( tileId ) );
 	}
-	
-	public void markTileRandom() {
-		setTileValue( board.getRandomAvailable() );
-	}
 
 	private void setTileValue( Tile tile ) {
 		if ( isGameOver() || !tile.isEmpty() ) {
 			return;
 		}
-
+		checkTurn();
 		tile.setValue( nextMoveX ? Tile.Value.X : Tile.Value.O );
 		nextMoveX = !nextMoveX;
 		
 		Tile.Value winValue = evaluateWinValue();
 		if ( winValue != null ) {
 			Tile.Value playerValue = playerGoFirst ? Tile.Value.X : Tile.Value.O;
-			playerState = winValue == playerValue ? PlayerState.WIN : PlayerState.LOSS;
+			playerState = winValue == playerValue ? PlayerState.CROSS_WON : PlayerState.NOUGHT_WON;
 		} else {
-			playerState = board.isFull() ? PlayerState.DRAW : PlayerState.IN_PROGRESS;
+			if (board.isFull()){
+				playerState = PlayerState.DRAW;
+			}
 		}
+	}
+
+	private void checkTurn(){
+		if (nextMoveX)
+			playerTurn = PlayerState.O_TURN;
+		else
+			playerTurn = PlayerState.X_TURN;
 	}
 	
 	private Tile.Value evaluateWinValue() {
@@ -72,27 +73,22 @@ public class Game {
 				return first.getValue();
 			}
 		}
-
 		return null;
 	}
 
-	public void setPlayerGoFirst( boolean flag ) {
-		this.playerGoFirst = flag;
-	}
-
-	public boolean isPlayerGoFirst() {
-		return playerGoFirst;
-	}
-	
 	public boolean isGameOver() {
 		return playerState.isGameOver();
 	}
 
 	public void reset(int row, int col) {
-		startNew(row,col);
+		initGame(row,col);
 	}
 	
 	public PlayerState getPlayerState() {
 		return playerState;
+	}
+
+	public PlayerState getPlayerTurn() {
+		return playerTurn;
 	}
 }

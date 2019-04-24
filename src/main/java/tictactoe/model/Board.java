@@ -45,27 +45,8 @@ public class Board {
 	/**
 	 * @throws ArrayIndexOutOfBoundsException if rowIndex or columnIndex are out of bounds
 	 */
-	public Tile get( int rowIndex, int columnIndex ) {
+	private Tile get( int rowIndex, int columnIndex ) {
 		return tiles[ rowIndex ][ columnIndex ];
-	}
-
-	public Tile getRandomAvailable() {
-		List<Tile> available = new ArrayList<>();
-
-		for ( Tile[] row : tiles ) {
-			for ( Tile tile : row ) {
-				if ( tile.isEmpty() ) {
-					available.add( tile );
-				}
-			}
-		}
-
-		if ( available.isEmpty() ) {
-			return null;
-		}
-
-		int randomNum = new Random().nextInt( available.size() );
-		return available.get( randomNum );
 	}
 
 	public boolean isFull() {
@@ -76,7 +57,6 @@ public class Board {
 				}
 			}
 		}
-		
 		return true;
 	}
 
@@ -84,11 +64,11 @@ public class Board {
 		return tiles;
 	}
 
-	public List<Tile> getRow( int rowIndex ) {
+	private List<Tile> getRow( int rowIndex ) {
 		return Arrays.asList( tiles[ rowIndex ] );
 	}
 
-	public List<Tile> getColumn( int columnIndex ) {
+	private List<Tile> getColumn( int columnIndex ) {
 		List<Tile> column = new ArrayList<>();
 
 		for ( Tile[] row : tiles ) {
@@ -98,11 +78,11 @@ public class Board {
 		return column;
 	}
 
-	public List<Tile> getDiagonalLeftTopBottomRight() {
+	private List<Tile> getDiagonalLeftTopBottomRight() {
 		return Arrays.asList( get( 0, 0 ), get( 1, 1 ), get( 2, 2 ) );
 	}
 
-	public List<Tile> getDiagonalRightTopBottomLeft() {
+	private List<Tile> getDiagonalRightTopBottomLeft() {
 		return Arrays.asList( get( 0, 2 ), get( 1, 1 ), get( 2, 0 ) );
 	}
 
@@ -121,13 +101,5 @@ public class Board {
 		lines.add( getDiagonalRightTopBottomLeft() );
 
 		return lines;
-	}
-
-	public void reset() {
-		for ( Tile[] row : tiles ) {
-			for ( Tile tile : row ) {
-				tile.setValue( Tile.Value.EMPTY );
-			}
-		}
 	}
 }
